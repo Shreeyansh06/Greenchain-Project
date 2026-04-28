@@ -1,0 +1,32 @@
+{
+  "name": "greenchain-contracts",
+  "version": "1.0.0",
+  "description": "GreenChain Carbon Credit Smart Contracts on Polygon",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:amoy": "hardhat run deploy.js --network amoy",
+    "deploy:polygon": "hardhat run scripts/deploy.js --network polygon",
+    "deploy:local": "hardhat run deploy.js --network hardhat",
+    "verify:mumbai": "hardhat verify --network mumbai",
+    "node": "hardhat node"
+  },
+  "keywords": [
+    "blockchain",
+    "carbon-credits",
+    "polygon",
+    "erc20",
+    "smart-contracts"
+  ],
+  "author": "GreenChain Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "hardhat": "^2.17.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.6.1",
+    "dotenv": "^16.3.1"
+  }
+}
