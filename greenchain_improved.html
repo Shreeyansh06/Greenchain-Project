@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenChain - Decentralized Carbon Credit Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="greenchain_improved.css">
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">🌱 GreenChain</div>
+            <nav>
+                <a href="#" class="nav-link active" data-section="earn">Earn</a>
+                <a href="#" class="nav-link" data-section="marketplace">Marketplace</a>
+                <a href="#" class="nav-link" data-section="portfolio">Portfolio</a>
+            </nav>
+            <button class="connect-wallet" id="connectWallet">
+                Connect Wallet
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Turn Climate Action Into Digital Assets</h1>
+            <p>Earn blockchain-verified carbon credits for sustainable actions. Trade them on our P2P marketplace. Make climate action profitable.</p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalUsers">10,234</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalOffset">142 tons</div>
+                    <div class="stat-label">CO₂ Offset</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalTraded">₹4.2L</div>
+                    <div class="stat-label">Traded</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wallet Card -->
+        <div class="wallet-card">
+            <div>
+                <div style="color: var(--text-muted); margin-bottom: 0.5rem;">Your Balance</div>
+                <div class="wallet-balance">
+                    <span class="balance-amount" id="userBalance">0</span>
+                    <span class="balance-currency">CARB</span>
+                </div>
+                <div style="color: var(--text-muted); margin-top: 0.5rem;">
+                    <span id="walletAddress">Connect wallet to see balance</span>
+                </div>
+            </div>
+            <div class="wallet-actions">
+                <button class="btn btn-primary" onclick="switchToMarketplace()">Buy Credits</button>
+                <button class="btn btn-secondary" onclick="openModal('listCreditsModal')">List Credits</button>
+            </div>
+        </div>
+
+        <!-- Section Tabs -->
+        <div class="section-tabs">
+            <button class="tab-btn active" data-tab="earn">Earn Credits</button>
+            <button class="tab-btn" data-tab="marketplace">Marketplace</button>
+            <button class="tab-btn" data-tab="portfolio">Portfolio</button>
+        </div>
+
+        <!-- Earn Section -->
+        <section id="earnSection" class="section active">
+            <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; margin-bottom: 1rem;">Earn Carbon Credits</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Get rewarded for sustainable actions verified by AI</p>
+
+            <div class="earn-grid">
+                <div class="earn-card" onclick="openModal('uploadTreeModal')">
+                    <span class="earn-icon">🌳</span>
+                    <h3 class="earn-title">Plant Trees</h3>
+                    <p class="earn-description">Upload photo proof of planting</p>
+                    <span class="earn-reward">Earn 20 CARB/tree</span>
+                </div>
+
+                <div class="earn-card" onclick="openModal('transportModal')">
+                    <span class="earn-icon">🚌</span>
+                    <h3 class="earn-title">Public Transport</h3>
+                    <p class="earn-description">Log your eco-friendly commutes</p>
+                    <span class="earn-reward">Earn up to 5 CARB/day</span>
+                </div>
+
+                <div class="earn-card" onclick="openModal('solarModal')">
+                    <span class="earn-icon">☀️</span>
+                    <h3 class="earn-title">Solar Energy</h3>
+                    <p class="earn-description">Connect solar panel data</p>
+                    <span class="earn-reward">Earn 50 CARB/month</span>
+                </div>
+
+                <div class="earn-card" onclick="openModal('routeModal')">
+                    <span class="earn-icon">🚛</span>
+                    <h3 class="earn-title">Eco-Routes</h3>
+                    <p class="earn-description">Choose greener delivery routes</p>
+                    <span class="earn-reward">Earn 15 CARB/route</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marketplace Section -->
+        <section id="marketplaceSection" class="section">
+            <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; margin-bottom: 1rem;">Carbon Credit Marketplace</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Buy and sell verified carbon credits on our P2P marketplace</p>
+
+            <div class="marketplace-filters">
+                <button class="filter-btn active" onclick="filterListings('all')">All</button>
+                <button class="filter-btn" onclick="filterListings('buy')">Buy Orders</button>
+                <button class="filter-btn" onclick="filterListings('sell')">Sell Orders</button>
+                <button class="filter-btn" onclick="filterListings('trees')">Tree Planting</button>
+                <button class="filter-btn" onclick="filterListings('solar')">Solar Energy</button>
+                <button class="filter-btn" onclick="filterListings('transport')">Transport</button>
+            </div>
+
+            <div class="marketplace-grid" id="marketplaceGrid">
+                <!-- Listings will be populated dynamically from smart contract -->
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolioSection" class="section">
+            <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; margin-bottom: 2rem;">Your Portfolio</h2>
+
+            <div class="portfolio-header">
+                <div class="portfolio-stat-card">
+                    <div class="stat-title">Total Holdings</div>
+                    <div class="stat-big-value"><span id="portfolioHoldings">0</span> <span style="font-size: 1.5rem; color: var(--text-secondary);">CARB</span></div>
+                    <div class="stat-change" id="weeklyChange">+0 this week</div>
+                </div>
+
+                <div class="portfolio-stat-card">
+                    <div class="stat-title">Portfolio Value</div>
+                    <div class="stat-big-value" id="portfolioValue">₹0.00</div>
+                    <div class="stat-change">+0% this month</div>
+                </div>
+
+                <div class="portfolio-stat-card">
+                    <div class="stat-title">Total Earned</div>
+                    <div class="stat-big-value"><span id="totalEarned">0</span> <span style="font-size: 1.5rem; color: var(--text-secondary);">CARB</span></div>
+                    <div class="stat-change">All time</div>
+                </div>
+
+                <div class="portfolio-stat-card">
+                    <div class="stat-title">CO₂ Offset</div>
+                    <div class="stat-big-value"><span id="co2Offset">0</span> <span style="font-size: 1.5rem; color: var(--text-secondary);">kg</span></div>
+                    <div class="stat-change">Your impact</div>
+                </div>
+            </div>
+
+            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin: 3rem 0 1.5rem 0;">Holdings Breakdown</h3>
+
+            <div class="holdings-grid" id="holdingsGrid">
+                <!-- Holdings will be populated dynamically -->
+            </div>
+
+            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin: 3rem 0 1.5rem 0;">Recent Transactions</h3>
+
+            <div class="transaction-list" id="transactionList">
+                <!-- Transactions will be populated dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Upload Tree Modal -->
+    <div class="modal" id="uploadTreeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">🌳 Upload Tree Planting Proof</h3>
+                <button class="close-modal" onclick="closeModal('uploadTreeModal')">×</button>
+            </div>
+
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">AI will verify your action in 30 seconds</p>
+
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📸</div>
+                <p>Drag & drop or click to upload</p>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">PNG, JPG up to 10MB</p>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="verifyTreePhoto()">
+                Upload & Verify
+            </button>
+        </div>
+    </div>
+
+    <!-- Verification Result Modal -->
+    <div class="modal" id="verificationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">AI Verification Complete!</h3>
+                <button class="close-modal" onclick="closeModal('verificationModal')">×</button>
+            </div>
+
+            <div class="verification-result">
+                <div class="verification-header">
+                    <div class="verification-icon">✓</div>
+                    <h4>Action verified: Planted 1 tree</h4>
+                </div>
+
+                <div class="verification-scores">
+                    <div class="score-item">
+                        <div class="score-label">Vertex AI</div>
+                        <div class="score-value">92%</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Gemini</div>
+                        <div class="score-value">88%</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Final Score</div>
+                        <div class="score-value">90%</div>
+                    </div>
+                </div>
+
+                <div class="reward-display">
+                    <p style="margin-bottom: 1rem;">You earned:</p>
+                    <div class="reward-amount">+20 CARB</div>
+                    <p style="color: var(--text-secondary); margin-top: 0.5rem;">≈ ₹10.00</p>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="mintTokens(20)">
+                Claim Tokens
+            </button>
+        </div>
+    </div>
+
+    <!-- List Credits Modal -->
+    <div class="modal" id="listCreditsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">List Your Credits for Sale</h3>
+                <button class="close-modal" onclick="closeModal('listCreditsModal')">×</button>
+            </div>
+
+            <div style="margin: 2rem 0;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Amount (CARB)</label>
+                <input type="number" id="listAmount" placeholder="e.g., 100" style="width: 100%; padding: 0.75rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 1rem;">
+            </div>
+
+            <div style="margin: 2rem 0;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Price per CARB (₹)</label>
+                <input type="number" step="0.01" id="listPrice" placeholder="e.g., 0.50" style="width: 100%; padding: 0.75rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 1rem;">
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="listCredits()">
+                List on Marketplace
+            </button>
+        </div>
+    </div>
+
+    <!-- Buy Confirm Modal -->
+    <div class="modal" id="buyConfirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">💱 Confirm Trade</h3>
+                <button class="close-modal" onclick="closeModal('buyConfirmModal')">×</button>
+            </div>
+
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Review your transaction details</p>
+
+            <div style="background: var(--bg-elevated); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;" id="buyDetails">
+                <!-- Buy details will be populated dynamically -->
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem; text-align: center;">
+                Smart contract will escrow funds until delivery is confirmed
+            </p>
+
+            <button class="btn btn-primary" style="width: 100%;" id="confirmBuyBtn">
+                Confirm Purchase
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Success!</h3>
+                <button class="close-modal" onclick="closeModal('successModal')">×</button>
+            </div>
+
+            <div class="success-message">
+                <span class="success-icon">🎉</span>
+                <div>
+                    <h4 id="successTitle">Transaction successful</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;" id="successMessage">
+                        Your transaction has been completed
+                    </p>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="closeModal('successModal'); refreshData();">
+                Continue
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 2000; align-items: center; justify-content: center;">
+        <div style="text-align: center;">
+            <div class="loading" style="width: 60px; height: 60px; margin: 0 auto 1rem auto;"></div>
+            <p style="color: var(--text-primary); font-size: 1.1rem;" id="loadingText">Processing transaction...</p>
+        </div>
+    </div>
+
+    <!-- Load external JS -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="greenchain_improved.js"></script>
+</body>
+</html>
